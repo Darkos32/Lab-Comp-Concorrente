@@ -32,7 +32,7 @@ void* tarefa(void* arg){
     {
         fim = nelementos;
     }else{
-        fim = (id + 1) * nelementos;
+        fim = (id + 1) * blocos;
     }
     for (size_t i = inicio; i < fim; i++)
     {
