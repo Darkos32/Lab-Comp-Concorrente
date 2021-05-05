@@ -41,7 +41,8 @@ class Vetor {
         return tam;
     }
 
-    public  void verifica() {
+    // verifica se as threads incrementaram todos os elementos
+    public void verifica() {
         for (int i = 0; i < vetor.length; i++) {
             if (vetor[i] != i + 1) {
                 System.out.println("Houve um problema");
@@ -106,7 +107,6 @@ public class Lab06 {
             }
         }
         v.verifica();
-
 
     }
 
