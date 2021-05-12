@@ -1,4 +1,4 @@
-package Trabalho_2 ;
+package Trabalho_2;
 
 public class Leitura {
     private final Integer idLeitura;
@@ -18,6 +18,7 @@ public class Leitura {
     public Integer getIdSensor() {
         return idSensor;
     }
+
     public Integer getValor() {
         return valor;
     }
