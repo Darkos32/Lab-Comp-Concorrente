@@ -1,97 +1,97 @@
 package Trabalho_2;
 
 public class Atuadores extends Thread {
-    private final int id;
-    private int ultimaPos;
+    private final int id;// identificador do atuador
+    // !Relacionados ao vetor compartilhado
+    private Buffer compartilhado;// área compartilhada por todas as threas
+    
+    // !Relacioando ao controle da sinalização
     private int sinalVermelhoCount;
     private int sinalAmareloCount;
+    private boolean isSinalVermelho;
+    private boolean isSinalAmarelo;
+    // !Relacionados a média das medições
     private int medicoesCount;
+    private int somaValores;
     private int media;
-    private Buffer compartilhado;
-    private LeitorEscritor monitor;
-    private Leitura[] ultimos;
 
-    public Atuadores(int identificador, LeitorEscritor monitor, Buffer compartilhado) {
-        this.id = identificador;
-        this.monitor = monitor;
-        this.compartilhado = compartilhado;
+    // !Monitor da aplicação
+    private LeitorEscritor monitor;
+
+    public Atuadores(int i, LeitorEscritor m, Buffer b, int tam) {
+        this.id = i;
+        this.monitor = m;
+        this.compartilhado = b;
         this.sinalAmareloCount = 0;
         this.sinalVermelhoCount = 0;
-        this.ultimos = new Leitura[15];
+        this.isSinalAmarelo = false;
+        this.isSinalVermelho = false;
         this.medicoesCount = 0;
-        this.media = 0;
+        this.somaValores = 0;
     }
 
-    private void setMedia() {
-        media = media / medicoesCount;
-    }
-
-    private void setUltimasMedicoes() {
-        int pos = 0;
-        Leitura tempLeitura;
-        media = 0;// reseta a média
-        medicoesCount = 0;// reseta o contador
-        ultimaPos = compartilhado.getUltimaPosEscrita(id);// garante que a medições lidas estarão ordenadas pelos seus
-                                                          // ids
-        for (int i = ultimaPos + 1; i != ultimaPos; i = (i + 1) % 60) {
-            tempLeitura = compartilhado.ler(i);
-            if (tempLeitura.getIdSensor() != this.id) {
+    // Percorre o buffer recolhendo as leituras pertinentes ao atuador
+    private void percorrer_buffer() {
+        Leitura tempLeitura;// variável temporária
+        for (int i = compartilhado.getUltimaPosEscrita(id); i != compartilhado.getProxPos(); i--) {
+            tempLeitura = compartilhado.ler((i % compartilhado.getLength()) + compartilhado.getLength());
+            if (tempLeitura.getIdSensor() != this.id) {// ignora leituras que não tenham o sensor de mesmo id
                 continue;
             }
-            ultimos[pos] = tempLeitura;
-            pos = (pos + 1) % 15;
-            media += tempLeitura.getValor();
+            controleDeSinais(tempLeitura.getValor());
+            somaValores += tempLeitura.getValor();
             medicoesCount++;
+            // ultimos[i % ultimos.length] = tempLeitura;
+
         }
-        this.setMedia();// calcula a media
     }
 
-    private boolean sinalizacao() {
-        for (int i = 9; i < ultimos.length; i++) {
-            if (controleDeSinais(ultimos[i].getValor())) {
-                System.out.println("SINAL VERMELHO");
-                return true;
-            }
-        }
-        for (int i = 0; i < 9; i++) {
-            if (controleDeSinais(ultimos[i].getValor())) {
-                System.out.println("SINAL AMARELO");
-                return true;
-            }
-        }
-        return false;
+    // Calcula a média das temperaturas
+    public void setMedia() {
+        media = somaValores / medicoesCount;
     }
 
-    private boolean controleDeSinais(int temperatura) {
+    private void controleDeSinais(int temperatura) {
         if (temperatura > 35) {
-            sinalVermelhoCount++;
+            if (medicoesCount < 5) {
+                sinalVermelhoCount++;
+            }
             sinalAmareloCount++;
         } else {
             sinalVermelhoCount = 0;
         }
-        if (sinalVermelhoCount == 5 || sinalAmareloCount == 5) {
-            return true;
+        if (sinalVermelhoCount == 5) {
+            isSinalVermelho = true;
         }
-        return false;
-
+        if (sinalAmareloCount == 15) {
+            isSinalAmarelo = true;
+        }
     }
 
-    private void reset() {
-        this.media = 0;
-        this.medicoesCount = 0;
-        this.sinalAmareloCount = 0;
-        this.sinalVermelhoCount = 0;
-        
-    }
-
-    private void avaliarMedicoes() {
-        monitor.entrar_leitura();
-        this.setUltimasMedicoes();
-        monitor.sair_leitura();
+    private void sinalizar() {
+        if (isSinalVermelho) {
+            System.out.println("SINAL VERMELHO!!!");
+        } else if (isSinalAmarelo) {
+            System.out.println("Sinal Amarelo!");
+        } else {
+            System.out.println("Leitura normal");
+        }
+        System.out.print("Temperatura media: ");
+        System.out.println(media);
     }
 
     @Override
     public void run() {
+        try {
+            Thread.sleep(2000);
+            monitor.entrar_leitura();
+            percorrer_buffer();
+            setMedia();
+            sinalizar();
+            monitor.sair_leitura();    
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
 
     }
 }

@@ -27,7 +27,7 @@ public class LeitorEscritor {
     }
 
     public synchronized void entrar_escrita() {
-        while (escrevendo || lendo > 0) {
+        while ( escrevendo||lendo > 0) {
             try {
                 this.wait();
             } catch (Exception e) {

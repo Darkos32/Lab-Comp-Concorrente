@@ -8,8 +8,8 @@ public class Buffer {
     private int length;
     private int proxPos = -1;
     private Map<Integer,Integer> ultimaPosEscrita;
-    public Buffer() {
-        this.length = 60;
+    public Buffer(int tam) {
+        this.length = tam;
         ultimaPosEscrita = new HashMap<>();
         buffer = new Leitura[this.length];
         if (proxPos < 0) {
