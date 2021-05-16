@@ -1,10 +1,11 @@
 package Trabalho_2;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Random;
 
 public class Teste {
     public static void main(String[] args) {
+        Random r = new Random();
+        int proxMedicao = r.ints(1, 25, 41).toArray()[0];
+        System.out.println(proxMedicao);
     }
 }

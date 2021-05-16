@@ -18,7 +18,7 @@ public class Atuadores extends Thread {
     // !Monitor da aplicação
     private LeitorEscritor monitor;
 
-    public Atuadores(int i, LeitorEscritor m, Buffer b, int tam) {
+    public Atuadores(int i, LeitorEscritor m, Buffer b) {
         this.id = i;
         this.monitor = m;
         this.compartilhado = b;
@@ -82,15 +82,17 @@ public class Atuadores extends Thread {
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(2000);
-            monitor.entrar_leitura();
-            percorrer_buffer();
-            setMedia();
-            sinalizar();
-            monitor.sair_leitura();    
-        } catch (Exception e) {
-            // TODO: handle exception
+        while (true) {
+            try {
+                Thread.sleep(2000);
+                monitor.entrar_leitura();
+                percorrer_buffer();
+                setMedia();
+                sinalizar();
+                monitor.sair_leitura();
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
         }
 
     }
