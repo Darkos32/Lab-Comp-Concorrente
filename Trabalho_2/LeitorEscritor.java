@@ -1,8 +1,8 @@
 package Trabalho_2;
 
 public class LeitorEscritor {
-    private int lendo;
-    private boolean escrevendo;
+    private int lendo;// número de leitores ativos
+    private boolean escrevendo;// se existe ou não alguma thread escrevendo
 
     public LeitorEscritor() {
         lendo = 0;
@@ -22,12 +22,12 @@ public class LeitorEscritor {
     }
 
     public synchronized void sair_leitura() {
-        this.lendo--;
-        this.notifyAll();
+        this.lendo--;// decrementa o número de leitores
+        this.notifyAll();// libera as threads bloqueadas
     }
 
     public synchronized void entrar_escrita() {
-        while ( escrevendo||lendo > 0) {
+        while (escrevendo || lendo > 0) {
             try {
                 this.wait();
             } catch (Exception e) {

@@ -8,10 +8,10 @@ public class Atuadores extends Thread {
     // !Relacioando ao controle da sinalização
     private int sinalVermelhoCount;
     private int sinalAmareloCount;
-    private boolean isSinalVermelho;
-    private boolean isSinalAmarelo;
+    private boolean isSinalVermelho;// informa se o atuador está ou não em uma situação de sinal vermelho
+    private boolean isSinalAmarelo;// informa se o atuador está ou não em uma situação de sinal amarelo
     // !Relacionados a média das medições
-    private int medicoesCount;
+    private int medicoesCount;// número de medições no buffer compartilhado que esse atuador é responsável
     private int somaValores;
     private int media;
 
@@ -33,9 +33,10 @@ public class Atuadores extends Thread {
     // Percorre o buffer recolhendo as leituras pertinentes ao atuador
     private void percorrer_buffer() {
         Leitura tempLeitura;// variável temporária
-        int tamanhoCompartilhado = compartilhado.getLength();
+        int tamanhoCompartilhado = compartilhado.getLength();// tamanho do vetor que contém as leituras
+        int fim_for = compartilhado.getProxPos();// for termina quando chega na próxima posição a ser escrita no vetor
         for (int i = compartilhado.getUltimaPosEscrita(id); ((i % tamanhoCompartilhado) + tamanhoCompartilhado)
-                % tamanhoCompartilhado != compartilhado.getProxPos(); i--) {
+                % tamanhoCompartilhado != fim_for; i--) {
             tempLeitura = compartilhado.ler(((i % tamanhoCompartilhado) + tamanhoCompartilhado) % tamanhoCompartilhado);
             if (tempLeitura == null || tempLeitura.getIdSensor() != this.id) {// ignora leituras que não tenham o sensor
                                                                               // de mesmo id
@@ -44,7 +45,6 @@ public class Atuadores extends Thread {
             controleDeSinais(tempLeitura.getValor());
             somaValores += tempLeitura.getValor();
             medicoesCount++;
-            // ultimos[i % ultimos.length] = tempLeitura;
 
         }
     }
@@ -73,26 +73,28 @@ public class Atuadores extends Thread {
 
     private void sinalizar() {
         if (isSinalVermelho) {
-            System.out.println("SINAL VERMELHO!!!");
+            System.out.printf("SINAL VERMELHO!!!\nTemperatura media: %d\n", media);
         } else if (isSinalAmarelo) {
-            System.out.println("Sinal Amarelo!");
+            System.out.printf("Sinal Amarelo!\nTemperatura media: %d\n", media);
         } else {
-            System.out.println("Leitura normal");
+            System.out.printf("Leitura normal\nTemperatura media: %d\n", media);
         }
-        System.out.print("Temperatura media: ");
-        System.out.println(media);
+        // System.out.printf("Temperatura media: %d\n", media);
+        // System.out.print("Temperatura media: ");
+        // System.out.println(media);
     }
 
+    // atividade realizada pela thread
     @Override
     public void run() {
-        while (true) {
+        while (true) {// realiza o looping indeterminadamente
             try {
-                Thread.sleep(2000);
-                monitor.entrar_leitura();
+                Thread.sleep(2000);// pausa a thread por 2 segundos
+                monitor.entrar_leitura();// verifica se o buffer compartilhado está disponível para leitura
                 percorrer_buffer();
-                setMedia();
+                setMedia();//cáculo da média
                 sinalizar();
-                monitor.sair_leitura();
+                monitor.sair_leitura();//finaliza o processo de leitura 
             } catch (Exception e) {
                 // TODO: handle exception
             }

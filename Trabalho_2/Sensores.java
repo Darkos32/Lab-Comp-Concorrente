@@ -26,20 +26,22 @@ public class Sensores extends Thread {
     }
 
     private void ArmazenarMedicao() {
-        int temperatura = this.getMedicao();
+        int temperatura = this.getMedicao();// simula a temperatura
         if (temperatura > 30) {
             this.proxLeitura = new Leitura(this.contador, this.id, temperatura);
-            monitor.entrar_escrita();
-            compartilhado.escrever(this.proxLeitura, this.id);
-            monitor.sair_escrita();
+            monitor.entrar_escrita();// verifica se a thread está disponível para escrita
+            compartilhado.escrever(this.proxLeitura, this.id);// escreve a medição no buffer compartilhado
+            monitor.sair_escrita();// finaliza o processo de escrita
 
         }
     }
 
+    // atividade executada pela thread
+    @Override
     public void run() {
-        while (true) {
+        while (true) {// repete o looping indefinidamente
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1000);// pausa a thread por 1 segundo
                 this.ArmazenarMedicao();
             } catch (InterruptedException e) {
                 System.out.println("Erro -- Thread sleep");
