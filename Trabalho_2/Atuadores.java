@@ -4,7 +4,7 @@ public class Atuadores extends Thread {
     private final int id;// identificador do atuador
     // !Relacionados ao vetor compartilhado
     private Buffer compartilhado;// área compartilhada por todas as threas
-    
+
     // !Relacioando ao controle da sinalização
     private int sinalVermelhoCount;
     private int sinalAmareloCount;
@@ -33,9 +33,12 @@ public class Atuadores extends Thread {
     // Percorre o buffer recolhendo as leituras pertinentes ao atuador
     private void percorrer_buffer() {
         Leitura tempLeitura;// variável temporária
-        for (int i = compartilhado.getUltimaPosEscrita(id); i != compartilhado.getProxPos(); i--) {
-            tempLeitura = compartilhado.ler((i % compartilhado.getLength()) + compartilhado.getLength());
-            if (tempLeitura.getIdSensor() != this.id) {// ignora leituras que não tenham o sensor de mesmo id
+        int tamanhoCompartilhado = compartilhado.getLength();
+        for (int i = compartilhado.getUltimaPosEscrita(id); ((i % tamanhoCompartilhado) + tamanhoCompartilhado)
+                % tamanhoCompartilhado != compartilhado.getProxPos(); i--) {
+            tempLeitura = compartilhado.ler(((i % tamanhoCompartilhado) + tamanhoCompartilhado) % tamanhoCompartilhado);
+            if (tempLeitura == null || tempLeitura.getIdSensor() != this.id) {// ignora leituras que não tenham o sensor
+                                                                              // de mesmo id
                 continue;
             }
             controleDeSinais(tempLeitura.getValor());
