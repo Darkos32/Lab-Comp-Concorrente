@@ -37,7 +37,7 @@
             "request": "launch",
             "mainClass": "Trabalho_2.Trabalho2",
             "projectName": "Lab-Comp-Concorrente1_304a1c8c",
-            "args": "10"
+            "args": "10 0", 
         }
     ]
 }

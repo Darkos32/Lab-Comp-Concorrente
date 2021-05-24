@@ -22,4 +22,9 @@ public class Leitura {
     public Integer getValor() {
         return valor;
     }
+    @Override
+    public String toString() {
+        String temp = "(Leitura do sensor: " +Integer.toString(idSensor) +" " + "Valor: "+Integer.toString(valor)+")";
+        return temp;
+    }
 }

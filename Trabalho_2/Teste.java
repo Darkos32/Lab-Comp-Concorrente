@@ -5,7 +5,8 @@ import java.util.Random;
 public class Teste {
     public static void main(String[] args) {
         Random r = new Random();
-        int proxMedicao = r.ints(1, 25, 41).toArray()[0];
-        System.out.println(60%60);
+        int t1 = 3, t2 = 2;
+        float proxMedicao = (float)t1/t2 ;
+        System.out.println(proxMedicao);
     }
 }
