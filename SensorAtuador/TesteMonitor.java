@@ -1,4 +1,4 @@
-package Trabalho_2;
+package SensorAtuador;
 
 class TesteEscritor extends Thread {
     private LeitorEscritor monitor;

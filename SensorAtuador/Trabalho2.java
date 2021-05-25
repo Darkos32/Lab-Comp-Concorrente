@@ -1,4 +1,4 @@
-package Trabalho_2;
+package SensorAtuador;
 
 /**
  * Trabalho2

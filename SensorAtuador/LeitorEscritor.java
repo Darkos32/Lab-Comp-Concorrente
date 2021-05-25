@@ -1,4 +1,4 @@
-package Trabalho_2;
+package SensorAtuador;
 public class LeitorEscritor {
     private int lendo;// número de leitores ativos
     private boolean escrevendo;// se existe ou não alguma thread escrevendo

@@ -1,4 +1,4 @@
-package Trabalho_2;
+package SensorAtuador;
 
 public class Atuadores extends Thread {
     private final int id;// identificador do atuador

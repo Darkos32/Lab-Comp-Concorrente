@@ -1,4 +1,4 @@
-package Trabalho_2;
+package SensorAtuador;
 
 public class Leitura {
     private final Integer idLeitura;
