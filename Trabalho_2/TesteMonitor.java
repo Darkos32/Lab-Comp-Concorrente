@@ -48,8 +48,8 @@ class TesteLeitor extends Thread {
 
 public class TesteMonitor {
     public static void main(String[] args) {
-        Thread threads[] = new Thread[50];
-        Thread threads2[] = new Thread[50];
+        Thread threads[] = new Thread[Integer.parseInt(args[0])];
+        Thread threads2[] = new Thread[Integer.parseInt(args[0])];
         LeitorEscritor monitor = new LeitorEscritor(1);
         for (int i = 0; i < threads2.length; i++) {// criação das threads
             threads[i] = new TesteLeitor(monitor);

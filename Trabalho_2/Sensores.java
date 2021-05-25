@@ -6,7 +6,6 @@ public class Sensores extends Thread {
     private final Integer id;// identificador do sensor
     private int contador;// controle de quantas medições um determinado sensor fez. Também serve como id
                          // para essas medições
-    private boolean isWating;
     private Leitura proxLeitura;// a medição realizada pelo sensor
     private Buffer compartilhado;// objeto onde serão armazenadas as medições
     private LeitorEscritor monitor;// controle da escrita no Buffer compartilhado
@@ -16,7 +15,6 @@ public class Sensores extends Thread {
         this.id = identificador;
         this.compartilhado = compartilhado;
         this.monitor = monitor;
-        this.isWating = false;
         this.contador = 0;
         this.log = l;
     }

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Buffer {
-    private Leitura buffer[];// vetor onde se guarda as medições
+    private Trabalho_2.Leitura buffer[];// vetor onde se guarda as medições
     private int length;// tamanho do vetor buffer
     private int proxPos;// posição onde deve ser inserida a próxima medição
     private Map<Integer, Integer> ultimaPosEscrita;// guarda a última posição escrita por cada sensor

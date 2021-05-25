@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Trabalho2",
+            "request": "launch",
+            "mainClass": "Trabalho2.Trabalho2",
+            "projectName": "Lab-Comp-Concorrente1_304a1c8c"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -37,7 +44,7 @@
             "request": "launch",
             "mainClass": "Trabalho_2.Trabalho2",
             "projectName": "Lab-Comp-Concorrente1_304a1c8c",
-            "args": "10 0", 
+            "args": "10 0"
         }
     ]
 }
