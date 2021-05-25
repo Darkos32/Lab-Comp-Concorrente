@@ -1,4 +1,4 @@
-package Trabalho_2;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +24,14 @@ public class Buffer {
 
     // função get para o atributo proxPos
     public int getProxPos() {
-        return proxPos;
+        return proxPos%length;
     }
 
     // escreve uma medição na posição indicada
     public void escrever(Leitura medicao, int idSensor) {
-        this.buffer[this.proxPos] = medicao;
-        ultimaPosEscrita.put(idSensor, proxPos);
-        proxPos++;
+        this.buffer[this.proxPos%length] = medicao;// escreve a medição no buffer
+        ultimaPosEscrita.put(idSensor, proxPos);// marca a útima posição escrita pelo sensor que chamou a função
+        proxPos++;// atualiza a próxima posição ao ser escrita
     }
 
     // função get para o atributo length
